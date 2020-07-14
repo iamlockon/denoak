@@ -1,10 +1,9 @@
-import { Application, isHttpError, Status, HttpError } from "./dep.ts";
+import { Application, isHttpError, Status, oakCors } from "./dep.ts";
 import { config } from "./config.ts";
-import { routerRoutes, allowedMethods } from "./src/services/index.ts";
+import { routerRoutesAllowed } from "./src/services/index.ts";
 import { logger } from "./src/logger/index.ts";
 
 const app = new Application();
-
 
 // Error Handling Middleware
 app.use(async (ctx, next) => {
@@ -18,7 +17,8 @@ app.use(async (ctx, next) => {
           break;
         case Status.InternalServerError:
           ctx.response.status = Status.InternalServerError;
-          ctx.response.body = 'Sorry, but the server is currently not available...';
+          ctx.response.body =
+            "Sorry, but the server is currently not available...";
           break;
         default:
           ctx.response.status = Status.Teapot; // default case
@@ -29,13 +29,32 @@ app.use(async (ctx, next) => {
   }
 });
 
-app.use(routerRoutes);
-app.use(allowedMethods);
+// CORS
+
+app.use(oakCors());
+
+// Register all routes here
+for (const [route, allowed] of routerRoutesAllowed) {
+  app.use(route);
+  app.use(allowed);
+}
 
 app.addEventListener("listen", ({ hostname, port, secure }) => {
   logger.info(
     `Server started at port ${hostname ?? "localhost"}:${port} successfully`,
   );
+  hostname = hostname || "localhost";
+  Deno.env.set("SERVER_HOSTNAME", hostname);
+  Deno.env.set("SERVER_PORT", port.toString());
 });
 
-await app.listen({ port: config.server.port });
+const controller = new AbortController();
+const { signal } = controller;
+
+if (Deno.env.get('ENV') !== 'TEST')
+  await app.listen({ port: config.server.port, signal });
+
+export {
+  app,
+  controller,
+};

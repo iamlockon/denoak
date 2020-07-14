@@ -1,13 +1,16 @@
-import { Router } from '../../dep.ts';
+import { Router } from "../../dep.ts";
 
 const router = new Router();
-
-router.get('/example', (ctx) => {
-  ctx.response.body = 'This is Example route.';
+router.get("/example", (ctx) => {
+  ctx.response.body = "This is Example route.";
 });
 
-const exampleRouter = router.routes();
+const exampleRoutes = router.routes();
+const exampleAllowed = router.allowedMethods();
 
-export {
-  exampleRouter
-};
+const example = [
+  exampleRoutes,
+  exampleAllowed,
+];
+
+export default example;
