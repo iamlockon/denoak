@@ -16,7 +16,7 @@ Deno.test("Basic request handling and health check", async () => {
     .get("/health")
     .expect("Content-Type", "application/json; charset=utf-8")
     .expect({
-      healthy: true
+      healthy: true,
     })
     .expect(200);
 });

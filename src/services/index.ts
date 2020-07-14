@@ -8,8 +8,8 @@ router.get("/", (ctx) => {
 
 router.get("/health", (ctx) => {
   ctx.response.body = {
-    healthy: true
-  }
+    healthy: true,
+  };
 });
 
 const rootRoutes = router.routes();

@@ -26,3 +26,13 @@ export {
 export {
   oakCors,
 } from "https://deno.land/x/cors/mod.ts";
+
+// db
+
+export {
+  Client,
+} from "https://deno.land/x/mysql@v2.3.0/mod.ts";
+
+// computed_types
+
+export * as Schema from 'https://denoporter.sirjosh.workers.dev/v1/deno.land/x/computed_types@v1.1.0/src/index.ts';

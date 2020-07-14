@@ -1,7 +1,8 @@
 import { Application, isHttpError, Status, oakCors } from "./dep.ts";
-import { config } from "./config.ts";
+import { server, db } from "./config.ts";
 import { routerRoutesAllowed } from "./src/services/index.ts";
 import { logger } from "./src/logger/index.ts";
+import { client, checkAndUpdateDB } from "./src/db/index.ts";
 
 const app = new Application();
 
@@ -51,8 +52,10 @@ app.addEventListener("listen", ({ hostname, port, secure }) => {
 const controller = new AbortController();
 const { signal } = controller;
 
-if (Deno.env.get('ENV') !== 'TEST')
-  await app.listen({ port: config.server.port, signal });
+if (Deno.env.get("ENV") !== "TEST") {
+  await checkAndUpdateDB();
+  await app.listen({ port: server.port, signal });
+}
 
 export {
   app,
