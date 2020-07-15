@@ -3,6 +3,7 @@ import { server, db } from "./config.ts";
 import { routerRoutesAllowed } from "./src/services/index.ts";
 import { logger } from "./src/logger/index.ts";
 import { client, checkAndUpdateDB } from "./src/db/index.ts";
+import { isValidationError, isDBError, bodyParser } from "./utils/index.ts";
 
 const app = new Application();
 
@@ -24,8 +25,15 @@ app.use(async (ctx, next) => {
         default:
           ctx.response.status = Status.Teapot; // default case
       }
+    } else if (isValidationError(err)) {
+      ctx.response.status = Status.BadRequest;
+      ctx.response.body = err.message;
+    } else if (isDBError(err)) {
+      ctx.response.status = Status.InternalServerError;
+      ctx.response.body = err.message;
     } else {
       logger.critical(`Unknown error encountered: ${JSON.stringify(err)}`);
+      ctx.response.status = Status.InternalServerError;
     }
   }
 });

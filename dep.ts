@@ -14,6 +14,7 @@ export {
   Status,
   HttpError,
   Router,
+  RouterContext,
 } from "https://deno.land/x/oak@v5.3.1/mod.ts";
 
 // SuperDeno
@@ -35,4 +36,16 @@ export {
 
 // computed_types
 
-export * as Schema from 'https://denoporter.sirjosh.workers.dev/v1/deno.land/x/computed_types@v1.1.0/src/index.ts';
+import Schema, {
+  Type as _Type,
+  string as _string,
+  number as _number,
+  array as _array,
+} from "https://denoporter.sirjosh.workers.dev/v1/deno.land/x/computed_types@v1.1.0/src/index.ts";
+export {
+  Schema,
+  _Type,
+  _string,
+  _number,
+  _array,
+};

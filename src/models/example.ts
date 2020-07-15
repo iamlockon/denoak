@@ -1,15 +1,32 @@
-import { Schema as T } from "../../dep.ts"
+import { Schema as T, _string, _Type } from "../../dep.ts";
+import { client } from "../db/index.ts";
+import { DBError } from "../../utils/index.ts";
+import { TYPE } from "../consts/index.ts";
+import errTrace from "./eTrace.ts";
 
-export const addExample = async () => {
-
+interface Example {
+  description: string;
 }
 
-export const exampleValidator = () => {
+export const addExample = async ({ description }: Example) => {
+  try {
+    await client.execute(
+      `INSERT INTO example (description) VALUES (?);`,
+      [description],
+    );
+  } catch (err) {
+    await errTrace.add(TYPE.DB, err);
+    throw new DBError();
+  }
+};
 
-}
+export const exampleValidator = (target: Example) => {
+  const validator = ExampleSchema.destruct();
+  return validator(target);
+};
 
 // Define schema here
 
 const ExampleSchema = T({
-  content: T.string.trim().normalize().optional()
+  description: _string.trim().normalize(),
 });

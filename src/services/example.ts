@@ -1,7 +1,6 @@
 import { Router } from "../../dep.ts";
-import { client } from '../db/index.ts';
-import { Schema as T} from '../../dep.ts'
-import { addExample, exampleValidator } from '../models/example.ts';
+import { addExample, exampleValidator } from "../models/example.ts";
+import { ValidationError, bodyParser } from "../../utils/index.ts";
 
 const router = new Router();
 router.get("/example", (ctx) => {
@@ -9,9 +8,12 @@ router.get("/example", (ctx) => {
 });
 
 router.post("/example", async (ctx) => {
-  const [err, v] = exampleValidator(ctx.request.body);
-  const res = await addExample(v);
-  ctx.response.body = res;
+  const body = await bodyParser(ctx);
+  const [err, example] = exampleValidator(body);
+  if (err) throw new ValidationError(err.message);
+  if (!example) throw new Error("Cannot add empty example.");
+  await addExample(example);
+  ctx.response.status = 200;
 });
 
 const exampleRoutes = router.routes();
