@@ -8,3 +8,8 @@ export const db = {
   poolSize: 3,
   password: "password",
 };
+
+export const redis = {
+  host: "127.0.0.1",
+  port: 6379
+};

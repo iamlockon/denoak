@@ -1,5 +1,5 @@
 import { RouterContext } from "../dep.ts";
-
+export { startWorkers } from './worker.ts';
 export const bodyParser = async (ctx: RouterContext) => {
   if (ctx.request.hasBody) {
     const { value } = await ctx.request.body(

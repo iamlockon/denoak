@@ -34,6 +34,14 @@ export {
   Client,
 } from "https://deno.land/x/mysql@v2.3.0/mod.ts";
 
+// redis
+
+export {
+  connect,
+  Redis,
+  RedisConnectOptions
+} from "https://denopkg.com/keroxp/deno-redis/mod.ts";
+
 // computed_types
 
 import Schema, {

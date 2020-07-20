@@ -7,13 +7,13 @@
 - [x] CORS(cors)
 - [x] Testing(superdeno)
 - [x] Database Management(deno_mysql)
-- [ ] Cache Layer
-- [ ] Task Queue 
-
+- [x] Cache Layer(redis)
+- [x] Prioritized Task Queue (redis)
+- [ ] Graceful shutdown
 ### Usage
 
 ```
-$ deno run --allow-net --allow-env --allow-read main.ts
+$ deno run --allow-net --allow-env --allow-read --allow-run main.ts
 ```
 
 ### Test

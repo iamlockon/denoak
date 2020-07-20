@@ -2,8 +2,9 @@ import { Application, isHttpError, Status, oakCors } from "./dep.ts";
 import { server, db } from "./config.ts";
 import { routerRoutesAllowed } from "./src/services/index.ts";
 import { logger } from "./src/logger/index.ts";
-import { client, checkAndUpdateDB } from "./src/db/index.ts";
-import { isValidationError, isDBError, bodyParser } from "./utils/index.ts";
+import { checkAndUpdateDB } from "./src/db/index.ts";
+import { redisClient } from './src/redis/index.ts';
+import { isValidationError, isDBError, startWorkers } from "./utils/index.ts";
 
 const app = new Application();
 
@@ -62,6 +63,9 @@ const { signal } = controller;
 
 if (Deno.env.get("ENV") !== "TEST") {
   await checkAndUpdateDB();
+  logger.info(`[Redis] PING: ${await redisClient.ping()}`);
+  // start Workers asynchronously
+  startWorkers();
   await app.listen({ port: server.port, signal });
 }
 

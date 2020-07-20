@@ -15,9 +15,6 @@ export async function clientBuilder(opts?: object) {
   return client;
 }
 
-async function initDB() {
-}
-
 export async function checkAndUpdateDB() {
   try {
     const res = await client.execute(
@@ -86,6 +83,7 @@ async function updateDB(isInit: boolean = false) {
   logger.info("DB is now up-to-date.");
 }
 let client = await clientBuilder();
+
 export {
   client,
 };

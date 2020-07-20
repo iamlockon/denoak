@@ -1,0 +1,5 @@
+export const QUEUES = {
+  HIGH: "HIGH_PRIORITY",
+  MID: "MID_PRIORITY",
+  LOW: "LOW_PRIORITY"
+};
